@@ -7,9 +7,10 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace BrunchTaskRunner
 {
-    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", Vsix.Version, IconResourceID = 400)]
-    [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionHasSingleProject, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionHasMultipleProjects, PackageAutoLoadFlags.BackgroundLoad)]
     [Guid(PackageGuids.guidBrunchPackageString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class BrunchPackage : Package
