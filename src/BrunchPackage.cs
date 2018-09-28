@@ -1,9 +1,9 @@
-﻿using System.Runtime.InteropServices;
-using EnvDTE;
+﻿using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Runtime.InteropServices;
 
 namespace BrunchTaskRunner
 {
@@ -13,15 +13,15 @@ namespace BrunchTaskRunner
     [ProvideAutoLoad(UIContextGuids80.SolutionHasMultipleProjects, PackageAutoLoadFlags.BackgroundLoad)]
     [Guid(PackageGuids.guidBrunchPackageString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    public sealed class BrunchPackage : Package
+    public sealed class BrunchPackage : AsyncPackage
     {
         internal static DTE2 Dte;
 
-        protected override void Initialize()
+        protected override async System.Threading.Tasks.Task InitializeAsync(System.Threading.CancellationToken cancellationToken, System.IProgress<ServiceProgressData> progress)
         {
-            Dte = (DTE2)GetService(typeof(DTE));
-            Logger.Initialize(this, Vsix.Name);
-            base.Initialize();
+            await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+            Dte = (DTE2)await GetServiceAsync(typeof(DTE));
         }
 
         public static bool IsDocumentDirty(string documentPath, out IVsPersistDocData persistDocData)

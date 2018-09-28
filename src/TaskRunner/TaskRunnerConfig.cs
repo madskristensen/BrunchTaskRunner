@@ -9,9 +9,9 @@ namespace BrunchTaskRunner
 {
     class TaskRunnerConfig : ITaskRunnerConfig
     {
-        private ImageSource _icon;
-        private ITaskRunnerCommandContext _context;
-        ITaskRunnerNode _hierarchy;
+        private readonly ImageSource _icon;
+        private readonly ITaskRunnerCommandContext _context;
+        readonly ITaskRunnerNode _hierarchy;
 
         public TaskRunnerConfig(ITaskRunnerCommandContext context, ITaskRunnerNode hierarchy, ImageSource icon)
         {
@@ -63,12 +63,9 @@ namespace BrunchTaskRunner
                     ProjectHelpers.AddNestedFile(configPath, bindingPath);
                 }
 
-                IVsPersistDocData persistDocData;
-                if (!BrunchPackage.IsDocumentDirty(configPath, out persistDocData) && persistDocData != null)
+                if (!BrunchPackage.IsDocumentDirty(configPath, out IVsPersistDocData persistDocData) && persistDocData != null)
                 {
-                    int cancelled;
-                    string newName;
-                    persistDocData.SaveDocData(VSSAVEFLAGS.VSSAVE_SilentSave, out newName, out cancelled);
+                    persistDocData.SaveDocData(VSSAVEFLAGS.VSSAVE_SilentSave, out string newName, out int cancelled);
                 }
                 else if (persistDocData == null)
                 {
@@ -79,7 +76,7 @@ namespace BrunchTaskRunner
             }
             catch (Exception ex)
             {
-                Logger.Log(ex);
+                System.Diagnostics.Debug.Write(ex);
                 return false;
             }
         }

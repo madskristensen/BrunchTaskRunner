@@ -20,8 +20,10 @@ namespace BrunchTaskRunner
             if (_dte.SourceControl.IsItemUnderSCC(file) && !_dte.SourceControl.IsItemCheckedOut(file))
                 _dte.SourceControl.CheckOutItem(file);
 
-            FileInfo info = new FileInfo(file);
-            info.IsReadOnly = false;
+            FileInfo info = new FileInfo(file)
+            {
+                IsReadOnly = false
+            };
         }
         
         public static void AddFileToProject(this Project project, string file, string itemType = null)
@@ -45,7 +47,7 @@ namespace BrunchTaskRunner
             }
             catch (Exception ex)
             {
-                Logger.Log(ex);
+                System.Diagnostics.Debug.Write(ex);
             }
         }
 
@@ -71,7 +73,7 @@ namespace BrunchTaskRunner
             }
             catch (Exception ex)
             {
-                Logger.Log(ex);
+                System.Diagnostics.Debug.Write(ex);
             }
         }
 
@@ -92,7 +94,7 @@ namespace BrunchTaskRunner
             }
             catch (Exception ex)
             {
-                Logger.Log(ex);
+                System.Diagnostics.Debug.Write(ex);
             }
         }
 
